@@ -1,0 +1,27 @@
+version: '3'
+services:
+  dbapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./go/src/serversample:/go/src/serversample
+    depends_on: 
+      - db
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - "./docker/data/mongo:/data/db"
+    ports:
+        - "27017:27017"
+volumes:
+  mongodata:
+    driver: local
