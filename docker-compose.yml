@@ -10,11 +10,11 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "9090:9090"
+      - "8080:8080"
     volumes:
       - ./go/src/serversample:/go/src/serversample
     depends_on: 
-      - db
+      - mongodb
   mongodb:
     image: mongo
     container_name: mongodb
