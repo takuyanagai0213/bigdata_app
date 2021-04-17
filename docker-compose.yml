@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dbapi:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./go/src/serversample:/go/src/serversample
+      - ./src:/go/src/work
     depends_on: 
       - mongodb
   mongodb:

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"time"
 
@@ -21,8 +22,9 @@ func main() {
 }
 
 func rootPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the Go Api Server")
-	fmt.Println("Root endpoint is hooked!")
+	tmpl := template.Must(template.ParseFiles("./templates/index.html"))
+	str := "Sample Message"
+	tmpl.Execute(w, str)
 }
 
 func StartWebServer() error {
@@ -77,11 +79,12 @@ func fetchAllItems(w http.ResponseWriter, r *http.Request) {
 		"keyword": "俺のキーワード",
 	})
 	// 結果のカーソルをforで回して順番に結果を取得
-	for cur.Next(context.Background()) {
-		var ret dataType
-		cur.Decode(&ret)
-		fmt.Println(ret)
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(ret)
-	}
+	fmt.Println(cur.Next(context.Background()))
+	// for cur.Next(context.Background()) {
+	var ret dataType
+	cur.Decode(&ret)
+	fmt.Println(ret)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(ret)
+	// }
 }
