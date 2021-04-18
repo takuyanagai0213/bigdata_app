@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-　<title>グラフ</title> 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-　<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-</head>
-<body>
-  <h1>グラフ</h1>
-  {{.}}
-  <canvas id="myChart"></canvas>
-  <script>
-class chart {
-  constructor(json){
-    console.log(this.json)
-  }
-  drowChart(json){
-    console.log(json[2].Value)
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'line',
@@ -25,7 +6,7 @@ class chart {
       datasets: [
         {
           label: '最高気温(度）',
-          data: json[2].Value,
+          data: [35, 34, 37, 35, 34, 35, 34, 25],
           borderColor: "rgba(255,0,0,1)",
           backgroundColor: "rgba(0,0,0,0)"
         },
@@ -56,17 +37,15 @@ class chart {
       },
     }
     });
-  }
-}
-const chartClass = new chart();
-$.ajax({
-  url: '/items',
-  type: "get",
-  dataType: 'json',
-}).then(function (json) {
-  console.log(json)
-  chartClass.drowChart(json);
-});
-</script>
-</body>
-</html>
+
+    var p = {};
+    $.ajax({
+      url: '/items',
+      type: "get",
+      dataType: 'json',
+      data: p,
+    }).then(function (json) {
+      // res = JSON.parse(json);
+      console.log(json)
+      // responseで返ってきたjsonを◯◯する
+    });
