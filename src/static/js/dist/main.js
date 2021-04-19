@@ -1,3 +1,10 @@
+
+class chart {
+  constructor(json){
+    console.log(this.json)
+  }
+  drowChart(json){
+    console.log(json[2].Value)
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'line',
@@ -6,7 +13,7 @@
       datasets: [
         {
           label: '最高気温(度）',
-          data: [35, 34, 37, 35, 34, 35, 34, 25],
+          data: json[2].Value,
           borderColor: "rgba(255,0,0,1)",
           backgroundColor: "rgba(0,0,0,0)"
         },
@@ -37,15 +44,14 @@
       },
     }
     });
-
-    var p = {};
-    $.ajax({
-      url: '/items',
-      type: "get",
-      dataType: 'json',
-      data: p,
-    }).then(function (json) {
-      // res = JSON.parse(json);
-      console.log(json)
-      // responseで返ってきたjsonを◯◯する
-    });
+  }
+}
+const chartClass = new chart();
+$.ajax({
+  url: '/items',
+  type: "get",
+  dataType: 'json',
+}).then(function (json) {
+  console.log(json)
+  chartClass.drowChart(json);
+});

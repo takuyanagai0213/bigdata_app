@@ -9,7 +9,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -18,9 +17,7 @@ import (
 
 // mani関数が最初に実行される
 func main() {
-
 	StartWebServer()
-
 }
 
 func rootPage(w http.ResponseWriter, r *http.Request) {
@@ -34,15 +31,12 @@ func rootPage(w http.ResponseWriter, r *http.Request) {
 
 func StartWebServer() {
 	fmt.Println("Rest API with Mux Routers")
-	router := mux.NewRouter().StrictSlash(true)
-	// router.HandleFunc({ エンドポイント }, { レスポンス関数 }).Methods({ リクエストメソッド（複数可能） })
 	dir, _ := os.Getwd()
-	println((dir))
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static/")))) //追記
-	router.HandleFunc("/", rootPage)
-	router.HandleFunc("/items", fetchAllItems).Methods("GET")
-	router.HandleFunc("/newitem", createItem).Methods("GET")
-	http.ListenAndServe(fmt.Sprintf(":%d", 8080), router)
+	http.HandleFunc("/", rootPage)
+	http.HandleFunc("/items", fetchAllItems)
+	http.HandleFunc("/newitem", createItem)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static/"))))
+	http.ListenAndServe(fmt.Sprintf(":%d", 8080), nil)
 	return
 }
 
@@ -92,7 +86,7 @@ func fetchAllItems(w http.ResponseWriter, r *http.Request) {
 	err = collection.FindOne(context.Background(), filter).Decode(&doc)
 	fmt.Println(doc.String())
 	var docBsonD bson.D
-	err = bson.Allay(doc)
+	err = bson.Unmarshal(doc, &docBsonD)
 
 	w.Header().Set("Content-Type", "application/json")
 
