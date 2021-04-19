@@ -92,11 +92,8 @@ func fetchAllItems(w http.ResponseWriter, r *http.Request) {
 	err = collection.FindOne(context.Background(), filter).Decode(&doc)
 	fmt.Println(doc.String())
 	var docBsonD bson.D
-	err = bson.Unmarshal(doc, &docBsonD)
-	// if err != nil {
-	// 	return err
-	// }
-	fmt.Println(docBsonD)
+	err = bson.Allay(doc)
+
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(docBsonD)
